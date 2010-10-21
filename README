@@ -1,0 +1,7 @@
+A utility to resolve dependencies and concatenate coffeescript classes to a single source file
+
+
+coffeescript-concat requires underscore.js
+
+as a cakefile simply run cake concat or copy the functions to do as you wish. 
+
