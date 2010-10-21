@@ -1,4 +1,4 @@
-A utility to resolve dependencies and concatenate coffeescript classes to a single source file
+a utility to resolve dependencies and concatenate coffeescript classes to a single source file
 
 
 coffeescript-concat requires underscore.js
