@@ -59,8 +59,14 @@ findDependencies = (file) ->
 	dependencies = []
 	while (result = dependencyRegex.exec(file)) != null
 		dependencies.push(result[1])
+		
+	directiveRegex = /#=\s*require\s+([^\s]*)/g
+	while (result = directiveRegex.exe(file)) != null
+		console.log(result[1])
+		dependencies.push(result[1])
 	return dependencies
 
+	
 # Given a path to a directory and, optionally, a list of classes to ignore
 # since they are defined elsewhere, create a list of all files with the
 # classes they contain and the classes those classes depend on.
