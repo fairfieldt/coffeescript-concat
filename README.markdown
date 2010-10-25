@@ -7,7 +7,7 @@ It makes it easy to keep your CoffeeScript code in separate units and still run 
 * Automatically puts parent classes in an inheritance chain in the correct order
 
 * Allows you to specify that a class from another file needs to be included before another file.
-    When a `#= require Classname`` directive is encountered, coffeescript-concat will find the file containing that class, preprocess it, and put it above the including class.
+    When a `#= require Classname` directive is encountered, coffeescript-concat will find the file containing that class, preprocess it, and put it above the including class.
     
 * Allows you to specifiy that a file needs to be included before another file.
     When a `#= require <FileName>` or `#=require <FileName.coffee>` directive is encountered, coffeescript-concat will find the file, preprocess it, and put it above the including class. 
