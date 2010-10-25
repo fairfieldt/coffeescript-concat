@@ -20,6 +20,6 @@ coffeescript concat require a [node.js](http://nodejs.org) installation, [Coffee
 
 Use coffeescript-concat like this:
 
-    coffee coffeescript-concat.coffee -I /my/include/directory This.coffee That.coffee TheOther.coffee > output.coffee
+    coffee coffeescript-concat.coffee -I /my/include/directory -I includeDir2 A.coffee B.coffee > output.coffee
     
 This will preprocess and concatenate This.coffee, That.coffee, and TheOther.coffee along with any classes they require and output the resulting code into output.coffee.  coffeescript-concat prints the output to stdout so that you can easily write it to a file or pipe it to another utility for further processing.  
