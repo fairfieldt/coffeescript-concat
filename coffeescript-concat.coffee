@@ -6,7 +6,6 @@ require('underscore')
 # ignoring those in comments
 #
 findClasses = (file) ->
-	#ugly ugly ugly hack but I must be doing something stupid with the regex
 	file = '\n' + file
 	classRegex = /\n[^#\n]*class\s([A-Za-z_$-][A-Za-z0-9_$-]*)/g
 	
@@ -21,7 +20,6 @@ findClasses = (file) ->
 # also find the dependencies marked by #= require ClassName
 #
 findClassDependencies = (file) ->
-	#ugly ugly ugly hack but I must be doing something stupid with the regex
 	file = '\n' + file
 	
 	dependencyRegex = /\n[^#\n]*extends\s([A-Za-z_$-][A-Za-z0-9_$-]*)/g
