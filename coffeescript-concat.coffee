@@ -153,8 +153,8 @@ concatFiles = (sourceFiles, fileDefs) ->
 		if resolvedDef
 			fileDefStack = fileDefStack.concat(resolvedDef)
 
-	for f in fileDefStack
-		console.error(f.name)
+#	for f in fileDefStack
+#		console.error(f.name)
 	output = ''
 	for nextFileDef in fileDefStack
 		output += nextFileDef.contents + '\n'
