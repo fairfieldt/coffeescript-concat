@@ -188,7 +188,8 @@ sourceFiles = []
 readingIncludes = true
 i = 0
 while readingIncludes and i < args.length
-	if args[i++] == '-I' or args[i] == '--include-dir'
+	if args[i] == '-I' or args[i] == '--include-dir'
+		i++
 		dir = args[i++]
 		unless dir[dir.length-1] == ('/')
 			dir += '/'
