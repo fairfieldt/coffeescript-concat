@@ -2,30 +2,6 @@ sys = require('sys')
 fs = require('fs')
 require('underscore')
 
-CoffeeScript.on 'compile', (task) ->
-	args = process.argv[process.argv.indexOf('--')+1..]
-	console.log(process.argv)
-	console.log(args)
-	console.log(task.file)
-
-	includeDirectories = []
-	sourceFiles = []
-
-	readingIncludes = true
-	i = 0
-	while readingIncludes and i < args.length
-		if args[i] == '-I' or args[i] == '--include-dir'
-			i++
-			dir = args[i++]
-			unless dir[dir.length-1] == ('/')
-				dir += '/'
-			includeDirectories.push(dir)
-		else
-			readingIncludes = false
-
-	concatenate(sourceFiles, includeDirectories)
-
-
 # Search through a file and find all class definitions,
 # ignoring those in comments
 #
@@ -205,3 +181,22 @@ concatenate = (sourceFiles, includeDirectories) ->
 	output = removeDirectives(output)
 	console.log(output)
 
+args = process.argv
+includeDirectories = []
+sourceFiles = []
+
+readingIncludes = true
+i = 0
+while readingIncludes and i < args.length
+	if args[i] == '-I' or args[i] == '--include-dir'
+		i++
+		dir = args[i++]
+		unless dir[dir.length-1] == ('/')
+			dir += '/'
+		includeDirectories.push(dir)
+	else
+		readingIncludes = false
+while i < args.length
+	sourceFiles.push(args[i++])
+
+concatenate(sourceFiles, includeDirectories)
