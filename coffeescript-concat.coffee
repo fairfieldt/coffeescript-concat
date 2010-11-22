@@ -83,7 +83,7 @@ mapDependencies = (sourceFiles, searchDirectories) ->
 concatFiles = (sourceFiles, fileDefs) ->	
 	usedFiles = []
 	allFileDefs = fileDefs.slice(0)
-	sourceFileDefs = fd for fd in fileDefs when fd.name in sourceFiles
+	sourceFileDefs = (fd for fd in fileDefs when fd.name in sourceFiles)
 
 	# Given a class name, find the file that contains that
 	# class definition.  If it doesn't exist or we don't know
@@ -177,6 +177,7 @@ removeDirectives = (file) ->
 #
 concatenate = (sourceFiles, includeDirectories) ->
 	deps = mapDependencies(sourceFiles, includeDirectories)
+
 	output = concatFiles(sourceFiles, deps)
 	output = removeDirectives(output)
 	console.log(output)
