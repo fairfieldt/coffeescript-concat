@@ -1,6 +1,6 @@
 sys = require('sys')
 fs = require('fs')
-require('underscore')
+_ = require('underscore')
 
 # Search through a file and find all class definitions,
 # ignoring those in comments
