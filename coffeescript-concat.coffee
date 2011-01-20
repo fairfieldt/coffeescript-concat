@@ -180,7 +180,7 @@ concatenate = (sourceFiles, includeDirectories) ->
 
 	output = concatFiles(sourceFiles, deps)
 	output = removeDirectives(output)
-	console.log(output)
+	sys.puts(output)
 
 args = process.argv
 includeDirectories = []
