@@ -16,7 +16,7 @@ How does coffeescript-concat find the classes and files?  By specifying include 
 
 **Using coffeescript-concat:**
 
-coffeescript concat require a [node.js](http://nodejs.org) installation, [CoffeeScript](http://jashkenas.github.com/coffee-script/), and [underscore.js](http://documentcloud.github.com/underscore/).
+coffeescript concat requires a [node.js](http://nodejs.org) installation, [CoffeeScript](http://jashkenas.github.com/coffee-script/), and [underscore.js](http://documentcloud.github.com/underscore/).
 
 Use coffeescript-concat like this:
 
