@@ -21,7 +21,7 @@
 # Tom Fairfield <fairfield@cs.xu.edu>
 #
 
-sys = require('sys')
+util = require('util')
 fs = require('fs')
 _ = require('underscore')
 
@@ -203,9 +203,13 @@ concatenate = (sourceFiles, includeDirectories) ->
 
 	output = concatFiles(sourceFiles, deps)
 	output = removeDirectives(output)
-	sys.puts(output)
+	util.puts(output)
 
-args = process.argv
+args = process.argv[2..]
+unless args.length > 0
+	console.log('Usage: coffee coffeescript-concat.coffee [-I .] a.coffee b.coffee')
+	process.exit(1)
+
 includeDirectories = []
 sourceFiles = []
 
@@ -222,5 +226,7 @@ while readingIncludes and i < args.length
 		readingIncludes = false
 while i < args.length
 	sourceFiles.push(args[i++])
-
+unless sourceFiles.length > 1
+	console.log('Error, you must supply at least 2 source files to concatenate')
+	process.exit(1)
 concatenate(sourceFiles, includeDirectories)
