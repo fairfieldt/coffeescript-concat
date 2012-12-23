@@ -23,6 +23,7 @@
 
 util = require('util')
 fs = require('fs')
+path = require('path')
 _ = require('underscore')
 
 # Search through a file and find all class definitions,
@@ -81,7 +82,7 @@ findFileDependencies = (file) ->
 mapDependencies = (sourceFiles, searchDirectories) ->
 	files = sourceFiles
 	for dir in searchDirectories
-		files = files.concat(dir + f for f in fs.readdirSync(dir))
+		files = files.concat(path.join(dir, f) for f in fs.readdirSync(dir))
 
 	fileDefs = []
 	for file in files when /\.coffee$/.test(file)
@@ -198,35 +199,28 @@ removeDirectives = (file) ->
 # to, and optionally a list of class names to ignore, 
 # resolve the dependencies and put all classes in one file
 #
-concatenate = (sourceFiles, includeDirectories) ->
+concatenate = (sourceFiles, includeDirectories, outputFile) ->
 	deps = mapDependencies(sourceFiles, includeDirectories)
 
 	output = concatFiles(sourceFiles, deps)
 	output = removeDirectives(output)
-	util.puts(output)
-
-args = process.argv[2..]
-unless args.length > 0
-	console.log('Usage: coffee coffeescript-concat.coffee [-I .] a.coffee b.coffee')
-	process.exit(1)
-
-includeDirectories = []
-sourceFiles = []
-
-readingIncludes = true
-i = 0
-while readingIncludes and i < args.length
-	if args[i] == '-I' or args[i] == '--include-dir'
-		i++
-		dir = args[i++]
-		unless dir[dir.length-1] == ('/')
-			dir += '/'
-		includeDirectories.push(dir)
+	if outputFile
+		fs.writeFile(outputFile, output)
 	else
-		readingIncludes = false
-while i < args.length
-	sourceFiles.push(args[i++])
-unless sourceFiles.length > 1
-	console.log('Error, you must supply at least 2 source files to concatenate')
-	process.exit(1)
-concatenate(sourceFiles, includeDirectories)
+		util.puts(output)
+
+
+argv = require('optimist').
+usage("""Usage: coffee coffeescript-concat.coffee [-I .] [-o outputfile.coffee] a.coffee b.coffee
+If no output file is specified, the resulting source will sent to stdout
+""").
+describe('I', 'directory to search for files').
+alias('I', 'include-dir').
+describe('o', 'output file name').
+alias('o', 'output-file').
+demand(2).argv
+
+includeDirectories = argv.I
+sourceFiles = argv._
+
+concatenate(sourceFiles, includeDirectories, argv.o)
