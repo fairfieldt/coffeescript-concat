@@ -1,6 +1,6 @@
 **coffeescript-concat** is a utility that preprocesses and concatenates CoffeeScript source files.
 
-It makes it easy to keep your CoffeeScript code in separate units and still run them easily.  You can keep your source logically separated without the frustration of putting it all together to run or embed in a web page.  Additionally, coffeescript-concat will give you a single sourcefile that wille easily compile to a single Javascript file.
+It makes it easy to keep your CoffeeScript code in separate units and still run them easily.  You can keep your source logically separated without the frustration of putting it all together to run or embed in a web page.  Additionally, coffeescript-concat will give you a single sourcefile that will easily compile to a single Javascript file.
 
 **coffeescript-concat performs 3 operations:**
 
