@@ -15,11 +15,9 @@ It makes it easy to keep your CoffeeScript code in separate units and still run 
 How does coffeescript-concat find the classes and files?  By specifying include directories, you can tell coffeescript where to look.  If it can't find the needed file in any of the include directories, it will let you know.
 
 **Using coffeescript-concat:**
+Using [npm](npmjs.org):
+	$ `npm install -g coffeescript-concat`
 
-coffeescript concat requires a [node.js](http://nodejs.org) installation, [CoffeeScript](http://jashkenas.github.com/coffee-script/), and [underscore.js](http://documentcloud.github.com/underscore/).
-
-Use coffeescript-concat like this:
-
-    coffee coffeescript-concat.coffee -I /my/include/directory -I includeDir2 A.coffee B.coffee > output.coffee
+    coffee coffeescript-concat.coffee -I /my/include/directory -I includeDir2 A.coffee B.coffee -o output.coffee
     
-This will preprocess and concatenate This.coffee, That.coffee, and TheOther.coffee along with any classes they require and output the resulting code into output.coffee.  coffeescript-concat prints the output to stdout so that you can easily write it to a file or pipe it to another utility for further processing.  
+This will preprocess and concatenate This.coffee, That.coffee, and TheOther.coffee along with any classes they require and output the resulting code into output.coffee.  If you don't specify an output file (-o), coffeescript-concat prints the output to stdout so that you can easily write it to a file or pipe it to another utility for further processing.  
