@@ -211,7 +211,7 @@ concatenate = (sourceFiles, includeDirectories, outputFile) ->
 
 
 argv = require('optimist').
-usage("""Usage: coffee coffeescript-concat.coffee [-I .] [-o outputfile.coffee] a.coffee b.coffee
+usage("""Usage: coffeescript-concat [-I .] [-o outputfile.coffee] a.coffee b.coffee
 If no output file is specified, the resulting source will sent to stdout
 """).
 describe('I', 'directory to search for files').
