@@ -218,9 +218,9 @@ describe('I', 'directory to search for files').
 alias('I', 'include-dir').
 describe('o', 'output file name').
 alias('o', 'output-file').
-demand(2).argv
+argv
 
-includeDirectories = argv.I
+includeDirectories = argv.I or []
 sourceFiles = argv._
 
 concatenate(sourceFiles, includeDirectories, argv.o)
