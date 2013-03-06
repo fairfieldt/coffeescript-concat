@@ -223,7 +223,7 @@ alias('o', 'output-file')
 
 argv = options.argv
 includeDirectories = argv.I or []
-sourceFiles = argv._
+sourceFiles = if typeof argv._ is 'string' then [argv._] else argv._
 if argv.help || (includeDirectories.length==0 && sourceFiles.length==0) then options.showHelp()
 
 concatenate(sourceFiles, includeDirectories, argv.o)
