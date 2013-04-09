@@ -108,6 +108,7 @@ concatFiles = (sourceFiles, fileDefs) ->
 	usedFiles = []
 	allFileDefs = fileDefs.slice(0)
 	sourceFileDefs = (fd for fd in fileDefs when fd.name in sourceFiles)
+	sourceFileDefs = sourceFileDefs.concat(fileDefs)
 
 	# Given a class name, find the file that contains that
 	# class definition.  If it doesn't exist or we don't know
@@ -222,7 +223,7 @@ describe('o', 'output file name').
 alias('o', 'output-file')
 
 argv = options.argv
-includeDirectories = argv.I or []
+includeDirectories = if typeof argv.I is 'string' then [argv.I] else argv.I or []
 sourceFiles = if typeof argv._ is 'string' then [argv._] else argv._
 if argv.help || (includeDirectories.length==0 && sourceFiles.length==0) then options.showHelp()
 
