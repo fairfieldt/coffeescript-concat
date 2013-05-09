@@ -2,7 +2,7 @@
 
 It makes it easy to keep your CoffeeScript code in separate units and still run them easily.  You can keep your source logically separated without the frustration of putting it all together to run or embed in a web page.  Additionally, coffeescript-concat will give you a single sourcefile that will easily compile to a single Javascript file.
 
-**coffeescript-concat performs 3 operations:**
+**coffeescript-concat performs 4 operations:**
 
 * Automatically puts parent classes in an inheritance chain in the correct order
 
@@ -11,6 +11,10 @@ It makes it easy to keep your CoffeeScript code in separate units and still run 
     
 * Allows you to specifiy that a file needs to be included before another file.
     When a `#= require <FileName>` or `#=require <FileName.coffee>` directive is encountered, coffeescript-concat will find the file, preprocess it, and put it above the including class. 
+
+* Allows you to refer to external classes that will be available at runtime
+	When a `#= extern Classname` directive is encountered, coffeescript-concat
+	will assume that class exists.
     
 How does coffeescript-concat find the classes and files?  By specifying include directories, you can tell coffeescript where to look.  If it can't find the needed file in any of the include directories, it will let you know.
 
