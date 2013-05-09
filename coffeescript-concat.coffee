@@ -54,7 +54,7 @@ findExternClasses = (file) ->
 findClassDependencies = (file) ->
 	file = '\n' + file
 	
-	dependencyRegex = /\n[^#\n]*extends\s([A-Za-z_$-][A-Za-z0-9_$-]*)/g
+	dependencyRegex = /\n[^#\n]*extends\s([A-Za-z_$-][A-Za-z0-9_$-.]*)/g
 	
 	dependencies = []
 	while (result = dependencyRegex.exec(file)) != null
