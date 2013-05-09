@@ -1,6 +1,6 @@
 # coffeescript-concat.coffee 
 #
-#  Copyright (C) 2010-2011 Tom Fairfield
+#  Copyright (C) 2010-2013 Tom Fairfield
 #
 #  This software is provided 'as-is', without any express or implied
 #  warranty.  In no event will the authors be held liable for any damages
@@ -35,6 +35,14 @@ findClasses = (file) ->
 	
 	classNames = []
 	while (result = classRegex.exec(file)) != null
+		classNames.push(result[1])
+	return classNames.concat(findExternClasses(file))
+
+findExternClasses = (file) ->
+	file = '\n' + file
+	externRegex = /#=\s*extern\s+([A-Za-z_$-][A-Za-z0-9_$-.]*)/g
+	classNames = []
+	while (result = externRegex.exec(file)) != null
 		classNames.push(result[1])
 	return classNames
 
