@@ -20,10 +20,10 @@ How does coffeescript-concat find the classes and files?  By specifying include 
 
 **Using coffeescript-concat:**
 Using [npm](http://npmjs.org):  
-    $ npm install -g coffeescript-concat  
-    $ coffeescript-concat -I /my/include/directory -I includeDir2 A.coffee B.coffee -o output.coffee
+    $ `npm install -g coffeescript-concat`  
+    $ `coffeescript-concat -I /my/include/directory -I includeDir2 A.coffee B.coffee -o output.coffee`
 
 Using CoffeeScript directly:  
-    $ coffee coffeescript-concat.coffee -I /my/include/directory -I includeDir2 A.coffee B.coffee -o output.coffee
+    $ `coffee coffeescript-concat.coffee -I /my/include/directory -I includeDir2 A.coffee B.coffee -o output.coffee`
     
 This will preprocess and concatenate This.coffee, That.coffee, and TheOther.coffee along with any classes they require and output the resulting code into output.coffee.  If you don't specify an output file (-o), coffeescript-concat prints the output to stdout so that you can easily write it to a file or pipe it to another utility for further processing.  
