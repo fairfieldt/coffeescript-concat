@@ -82,29 +82,64 @@ findFileDependencies = (file) ->
 		dependencies.push(result[1])
 		
 	return dependencies
-	
+
+getFileNamesInDirsR = (dirs, filesFound, callback) ->
+	if dirs.length > 0
+		nextDir = dirs[dirs.length-1]
+		fs.readdir nextDir, (err, files) ->
+			directories = []
+			if err
+				throw err
+			else
+				for file in files
+					filePath = nextDir.replace(/\/$/, '') + '/' + file
+					stats = fs.statSync filePath
+					if stats.isDirectory()
+						directories.push filePath
+					else if stats.isFile()
+						filesFound.push filePath
+
+				dirs.splice dirs.length-1, 1
+				dirs = dirs.concat directories
+
+				getFileNamesInDirsR dirs, filesFound, (innerFilesFound) ->
+					callback innerFilesFound
+	else
+		callback filesFound
+
+# Given a list of directories, find all files recursively. The callback gets
+# one argument (filesFound) where filesFound is a list of all the files
+# present in each directory and subdirectory (excluding '.' and '..').
+#
+getFileNamesInDirs = (dirs, callback) ->
+	getFileNamesInDirsR dirs, [], callback
+
 # Given a path to a directory and, optionally, a list of search directories
 #, create a list of all files with the
 # classes they contain and the classes those classes depend on.
 #	
-mapDependencies = (sourceFiles, searchDirectories) ->
+mapDependencies = (sourceFiles, searchDirectories, searchDirectoriesRecursive, callback) ->
+
 	files = sourceFiles
 	for dir in searchDirectories
 		files = files.concat(path.join(dir, f) for f in fs.readdirSync(dir))
 
-	fileDefs = []
-	for file in files when /\.coffee$/.test(file)
-		contents = fs.readFileSync(file).toString()
-		classes = findClasses(contents)
-		dependencies = findClassDependencies(contents)
-		fileDependencies = findFileDependencies(contents)
-		#filter out the dependencies in the same file.
-		dependencies = _.select(dependencies, (d) -> _.indexOf(classes, d) == -1)
-		
-		fileDef = {name: file, classes: classes, dependencies: dependencies, fileDependencies: fileDependencies, contents: contents}
-		fileDefs.push(fileDef)
-		
-	return fileDefs
+	getFileNamesInDirs searchDirectoriesRecursive, (filesFound) ->
+		files = files.concat filesFound
+
+		fileDefs = []
+		for file in files when /\.coffee$/.test(file)
+			contents = fs.readFileSync(file).toString()
+			classes = findClasses(contents)
+			dependencies = findClassDependencies(contents)
+			fileDependencies = findFileDependencies(contents)
+			#filter out the dependencies in the same file.
+			dependencies = _.select(dependencies, (d) -> _.indexOf(classes, d) == -1)
+
+			fileDef = {name: file, classes: classes, dependencies: dependencies, fileDependencies: fileDependencies, contents: contents}
+			fileDefs.push(fileDef)
+
+		callback fileDefs
 
 # Given a list of files and their class/dependency information,
 # traverse the list and put them in an order that satisfies dependencies. 
@@ -204,35 +239,40 @@ removeDirectives = (file) ->
 	
 	return file
 	
-# Given a source directory, a relative filename to output
-# to, and optionally a list of class names to ignore, 
+# Given a list of source files,
+# a list of directories to look into for source files,
+# another list of directories to look into for source files recursevily
+# and a relative filename to output,
 # resolve the dependencies and put all classes in one file
-#
-concatenate = (sourceFiles, includeDirectories, outputFile) ->
-	deps = mapDependencies(sourceFiles, includeDirectories)
+concatenate = (sourceFiles, includeDirectories, includeDirectoriesRecursive, outputFile) ->
+	mapDependencies sourceFiles, includeDirectories, includeDirectoriesRecursive, (deps) ->
 
-	output = concatFiles(sourceFiles, deps)
-	output = removeDirectives(output)
-	if outputFile
-		fs.writeFile(outputFile, output)
-	else
-		util.puts(output)
+		output = concatFiles(sourceFiles, deps)
+		output = removeDirectives(output)
+		if outputFile
+			fs.writeFile(outputFile, output)
+		else
+			util.puts(output)
 
 
 options = require('optimist').
-usage("""Usage: coffeescript-concat [-I .] [-o outputfile.coffee] a.coffee b.coffee
+usage("""Usage: coffeescript-concat [-I .] [-R .] [-o outputfile.coffee] a.coffee b.coffee
 If no output file is specified, the resulting source will sent to stdout
 """).
 describe('h', 'display this help').
 alias('h','help').
 describe('I', 'directory to search for files').
 alias('I', 'include-dir').
+describe('R', 'directory to search for files recursively').
+alias('R', 'include-dir-recursive').
 describe('o', 'output file name').
 alias('o', 'output-file')
 
 argv = options.argv
 includeDirectories = if typeof argv.I is 'string' then [argv.I] else argv.I or []
+includeDirectoriesRecursive = if typeof argv.R is 'string' then [argv.R] else argv.R or []
 sourceFiles = if typeof argv._ is 'string' then [argv._] else argv._
-if argv.help || (includeDirectories.length==0 && sourceFiles.length==0) then options.showHelp()
+if argv.help || (includeDirectories.length==0 && includeDirectoriesRecursive.length==0 && sourceFiles.length==0)
+	options.showHelp()
 
-concatenate(sourceFiles, includeDirectories, argv.o)
+concatenate(sourceFiles, includeDirectories, includeDirectoriesRecursive, argv.o)
