@@ -88,20 +88,22 @@ getFileNamesInDirsR = (dirs, filesFound, callback) ->
 		nextDir = dirs[dirs.length-1]
 		fs.readdir nextDir, (err, files) ->
 			directories = []
-			for file in files
-				filePath = nextDir.replace(/\/$/, '') + '/' + file
-				stats = fs.statSync filePath
-				if stats.isDirectory()
-					directories.push filePath
-				else if stats.isFile()
-					filesFound.push filePath
+			if err
+				throw err
+			else
+				for file in files
+					filePath = nextDir.replace(/\/$/, '') + '/' + file
+					stats = fs.statSync filePath
+					if stats.isDirectory()
+						directories.push filePath
+					else if stats.isFile()
+						filesFound.push filePath
 
-			dirs.splice dirs.length-1, 1
-			dirs = dirs.concat directories
+				dirs.splice dirs.length-1, 1
+				dirs = dirs.concat directories
 
-			getFileNamesInDirsR dirs, filesFound, (innerFilesFound) ->
-				callback innerFilesFound
-
+				getFileNamesInDirsR dirs, filesFound, (innerFilesFound) ->
+					callback innerFilesFound
 	else
 		callback filesFound
 
