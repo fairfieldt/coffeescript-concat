@@ -1,6 +1,6 @@
 {
   "name": "coffeescript-concat",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A utility for combining coffeescript files and resolving their dependencies.",
   "main": "coffeescript-concat.js",
   "scripts": {
