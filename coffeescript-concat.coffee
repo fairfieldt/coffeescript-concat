@@ -151,7 +151,6 @@ concatFiles = (sourceFiles, fileDefs) ->
 	usedFiles = []
 	allFileDefs = fileDefs.slice(0)
 	sourceFileDefs = (fd for fd in fileDefs when fd.name in sourceFiles)
-	sourceFileDefs = sourceFileDefs.concat(fileDefs)
 
 	# Given a class name, find the file that contains that
 	# class definition.  If it doesn't exist or we don't know
