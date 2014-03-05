@@ -31,7 +31,7 @@ _ = require('underscore')
 #
 findClasses = (file) ->
 	file = '\n' + file
-	classRegex = /\n[^#\n]*class\s([A-Za-z_$-][A-Za-z0-9_$-]*)/g
+	classRegex = /\n[^#\n]*class\s@?([A-Za-z_$-][A-Za-z0-9_$-]*)/g
 	
 	classNames = []
 	while (result = classRegex.exec(file)) != null
