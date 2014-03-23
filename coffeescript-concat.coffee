@@ -36,7 +36,7 @@ findClasses = (file) ->
 	classNames = []
 	while (result = classRegex.exec(file)) != null
 		classNames.push(result[1])
-	return classNames.concat(findExternClasses(file))
+	classNames
 
 findExternClasses = (file) ->
 	file = '\n' + file
@@ -131,10 +131,12 @@ mapDependencies = (sourceFiles, searchDirectories, searchDirectoriesRecursive, c
 		for file in files when /\.coffee$/.test(file)
 			contents = fs.readFileSync(file).toString()
 			classes = findClasses(contents)
+			extern = findExternClasses(contents)
 			dependencies = findClassDependencies(contents)
 			fileDependencies = findFileDependencies(contents)
 			#filter out the dependencies in the same file.
 			dependencies = _.select(dependencies, (d) -> _.indexOf(classes, d) == -1)
+			dependencies = _.select(dependencies, (d) -> _.indexOf(extern, d) == -1)
 
 			fileDef = {name: file, classes: classes, dependencies: dependencies, fileDependencies: fileDependencies, contents: contents}
 			fileDefs.push(fileDef)
