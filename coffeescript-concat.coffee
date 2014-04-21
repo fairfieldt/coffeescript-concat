@@ -251,7 +251,9 @@ concatenate = (sourceFiles, includeDirectories, includeDirectoriesRecursive, out
 		output = concatFiles(sourceFiles, deps)
 		output = removeDirectives(output)
 		if outputFile
-			fs.writeFile(outputFile, output)
+			fs.writeFile(outputFile, output, (err) ->
+				console.error err if err
+			)
 		else
 			util.puts(output)
 
