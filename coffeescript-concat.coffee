@@ -159,7 +159,12 @@ mapDependencies = (sourceFiles, searchDirectories, searchDirectoriesRecursive, c
 concatFiles = (sourceFiles, fileDefs) ->	
 	usedFiles = []
 	allFileDefs = fileDefs.slice(0)
-	sourceFileDefs = (fd for fd in fileDefs when fd.name in sourceFiles)
+
+	# if sourceFiles was not specified by user concat all files that we found in directory
+	if sourceFiles.length > 0
+		sourceFileDefs = (fd for fd in fileDefs when fd.name in sourceFiles)
+	else
+		sourceFileDefs = fileDefs
 
 	# Given a class name, find the file that contains that
 	# class definition.  If it doesn't exist or we don't know
