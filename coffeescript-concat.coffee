@@ -138,7 +138,14 @@ mapDependencies = (sourceFiles, searchDirectories, searchDirectoriesRecursive, c
 			dependencies = _.select(dependencies, (d) -> _.indexOf(classes, d) == -1)
 			dependencies = _.select(dependencies, (d) -> _.indexOf(extern, d) == -1)
 
-			fileDef = {name: file, classes: classes, dependencies: dependencies, fileDependencies: fileDependencies, contents: contents}
+			fileDef = {
+				name: file,
+				classes: classes,
+				extern: extern,
+				dependencies: dependencies,
+				fileDependencies: fileDependencies,
+				contents: contents
+			}
 			fileDefs.push(fileDef)
 
 		callback fileDefs
@@ -159,7 +166,8 @@ concatFiles = (sourceFiles, fileDefs) ->
 	# about it, return null
 	findFileDefByClass = (className) ->
 		for fileDef in allFileDefs
-			for c in fileDef.classes
+			searchInClasses = fileDef.classes.concat fileDef.extern
+			for c in searchInClasses
 				if c == className
 					return fileDef
 		return null
