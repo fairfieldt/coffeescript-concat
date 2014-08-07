@@ -138,7 +138,14 @@ mapDependencies = (sourceFiles, searchDirectories, searchDirectoriesRecursive, c
 			dependencies = _.select(dependencies, (d) -> _.indexOf(classes, d) == -1)
 			dependencies = _.select(dependencies, (d) -> _.indexOf(extern, d) == -1)
 
-			fileDef = {name: file, classes: classes, dependencies: dependencies, fileDependencies: fileDependencies, contents: contents}
+			fileDef = {
+				name: file,
+				classes: classes,
+				extern: extern,
+				dependencies: dependencies,
+				fileDependencies: fileDependencies,
+				contents: contents
+			}
 			fileDefs.push(fileDef)
 
 		callback fileDefs
@@ -152,14 +159,20 @@ mapDependencies = (sourceFiles, searchDirectories, searchDirectoriesRecursive, c
 concatFiles = (sourceFiles, fileDefs) ->	
 	usedFiles = []
 	allFileDefs = fileDefs.slice(0)
-	sourceFileDefs = (fd for fd in fileDefs when fd.name in sourceFiles)
+
+	# if sourceFiles was not specified by user concat all files that we found in directory
+	if sourceFiles.length > 0
+		sourceFileDefs = (fd for fd in fileDefs when fd.name in sourceFiles)
+	else
+		sourceFileDefs = fileDefs
 
 	# Given a class name, find the file that contains that
 	# class definition.  If it doesn't exist or we don't know
 	# about it, return null
 	findFileDefByClass = (className) ->
 		for fileDef in allFileDefs
-			for c in fileDef.classes
+			searchInClasses = fileDef.classes.concat fileDef.extern
+			for c in searchInClasses
 				if c == className
 					return fileDef
 		return null
