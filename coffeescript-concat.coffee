@@ -156,7 +156,7 @@ mapDependencies = (sourceFiles, searchDirectories, searchDirectoriesRecursive, c
 # If it doesn't have any it's fit to go on the list.  If it does, find the file(s)
 # that contain the classes dependencies.  These must go first in the hierarchy.
 #	
-concatFiles = (sourceFiles, fileDefs) ->	
+concatFiles = (sourceFiles, fileDefs, listFilesOnly) ->
 	usedFiles = []
 	allFileDefs = fileDefs.slice(0)
 
@@ -238,8 +238,9 @@ concatFiles = (sourceFiles, fileDefs) ->
 #	for f in fileDefStack
 #		console.error(f.name)
 	output = ''
+	fileProp = if listFilesOnly then 'name' else 'contents'
 	for nextFileDef in fileDefStack
-		output += nextFileDef.contents + '\n'
+		output += nextFileDef[fileProp] + '\n'
 
 	return output
 	
@@ -258,10 +259,10 @@ removeDirectives = (file) ->
 # another list of directories to look into for source files recursevily
 # and a relative filename to output,
 # resolve the dependencies and put all classes in one file
-concatenate = (sourceFiles, includeDirectories, includeDirectoriesRecursive, outputFile) ->
+concatenate = (sourceFiles, includeDirectories, includeDirectoriesRecursive, outputFile, listFilesOnly) ->
 	mapDependencies sourceFiles, includeDirectories, includeDirectoriesRecursive, (deps) ->
 
-		output = concatFiles(sourceFiles, deps)
+		output = concatFiles(sourceFiles, deps, listFilesOnly)
 		output = removeDirectives(output)
 		if outputFile
 			fs.writeFile(outputFile, output, (err) ->
@@ -272,7 +273,7 @@ concatenate = (sourceFiles, includeDirectories, includeDirectoriesRecursive, out
 
 
 options = require('optimist').
-usage("""Usage: coffeescript-concat [-I .] [-R .] [-o outputfile.coffee] a.coffee b.coffee
+usage("""Usage: coffeescript-concat [-I .] [-R .] [-o outputfile.coffee] [--list-files] a.coffee b.coffee
 If no output file is specified, the resulting source will sent to stdout
 """).
 describe('h', 'display this help').
@@ -282,7 +283,8 @@ alias('I', 'include-dir').
 describe('R', 'directory to search for files recursively').
 alias('R', 'include-dir-recursive').
 describe('o', 'output file name').
-alias('o', 'output-file')
+alias('o', 'output-file').
+describe('list-files', 'list file names instead of outputting file contents')
 
 argv = options.argv
 includeDirectories = if typeof argv.I is 'string' then [argv.I] else argv.I or []
@@ -291,4 +293,4 @@ sourceFiles = if typeof argv._ is 'string' then [argv._] else argv._
 if argv.help || (includeDirectories.length==0 && includeDirectoriesRecursive.length==0 && sourceFiles.length==0)
 	options.showHelp()
 
-concatenate(sourceFiles, includeDirectories, includeDirectoriesRecursive, argv.o)
+concatenate(sourceFiles, includeDirectories, includeDirectoriesRecursive, argv.o, argv['list-files'])
