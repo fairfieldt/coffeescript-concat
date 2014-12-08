@@ -76,7 +76,7 @@ findFileDependencies = (file) ->
 	file = '\n' + file
 	
 	dependencies = []
-	fileDirectiveRegex = /#=\s*require\s+<([A-Za-z_$-][A-Za-z0-9_$-.]*)>/g
+	fileDirectiveRegex = /#=\s*require\s+<([A-Za-z0-9_$-][A-Za-z0-9_$-.]*)>/g
 	
 	while (result = fileDirectiveRegex.exec(file)) != null
 		dependencies.push(result[1])
