@@ -295,7 +295,9 @@ describe('R', 'directory to search for files recursively').
 alias('R', 'include-dir-recursive').
 describe('o', 'output file name').
 alias('o', 'output-file').
-describe('list-files', 'list file names instead of outputting file contents')
+describe('list-files', 'list file names instead of outputting file contents').
+alias('w', 'watch').
+describe('w', 'watch inputs and rerun if any changes are made')
 
 argv = options.argv
 
