@@ -286,9 +286,7 @@ describe('o', 'output file name').
 alias('o', 'output-file').
 describe('list-files', 'list file names instead of outputting file contents').
 alias('w', 'watch').
-describe('w', 'watch inputs and rerun if any changes are made').
-alias('c', 'compile').
-describe('c', 'compile coffeescript to javascript before outputting')
+describe('w', 'watch inputs and rerun if any changes are made')
 
 argv = options.argv
 includeDirectories = if typeof argv.I is 'string' then [argv.I] else argv.I or []
