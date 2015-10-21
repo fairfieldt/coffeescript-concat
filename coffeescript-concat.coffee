@@ -1,4 +1,4 @@
-# coffeescript-concat.coffee 
+# coffeescript-concat.coffee
 #
 #  Copyright (C) 2010-2013 Tom Fairfield
 #
@@ -32,7 +32,7 @@ _ = require('underscore')
 findClasses = (file) ->
 	file = '\n' + file
 	classRegex = /\n[^#\n]*class\s@?([A-Za-z_$-][A-Za-z0-9_$-.]*)/g
-	
+
 	classNames = []
 	while (result = classRegex.exec(file)) != null
 		classNames.push(result[1])
@@ -53,19 +53,19 @@ findExternClasses = (file) ->
 #
 findClassDependencies = (file) ->
 	file = '\n' + file
-	
+
 	dependencyRegex = /\n[^#\n]*extends\s([A-Za-z_$-][A-Za-z0-9_$-.]*)/g
-	
+
 	dependencies = []
 	while (result = dependencyRegex.exec(file)) != null
 		dependencies.push(result[1])
-		
+
 	file = file.replace(dependencyRegex, '')
-		
+
 	classDirectiveRegex = /#=\s*require\s+([A-Za-z_$-][A-Za-z0-9_$-]*)/g
 	while (result = classDirectiveRegex.exec(file)) != null
 		dependencies.push(result[1])
-		
+
 	return dependencies
 
 # Search through a file, given as a string and find the dependencies marked by
@@ -74,13 +74,13 @@ findClassDependencies = (file) ->
 #
 findFileDependencies = (file) ->
 	file = '\n' + file
-	
+
 	dependencies = []
 	fileDirectiveRegex = /#=\s*require\s+<([A-Za-z0-9_$-][A-Za-z0-9_$-.]*)>/g
-	
+
 	while (result = fileDirectiveRegex.exec(file)) != null
 		dependencies.push(result[1])
-		
+
 	return dependencies
 
 getFileNamesInDirsR = (dirs, filesFound, callback) ->
@@ -117,7 +117,7 @@ getFileNamesInDirs = (dirs, callback) ->
 # Given a path to a directory and, optionally, a list of search directories
 #, create a list of all files with the
 # classes they contain and the classes those classes depend on.
-#	
+#
 mapDependencies = (sourceFiles, searchDirectories, searchDirectoriesRecursive, callback) ->
 
 	files = sourceFiles
@@ -151,11 +151,11 @@ mapDependencies = (sourceFiles, searchDirectories, searchDirectoriesRecursive, c
 		callback fileDefs
 
 # Given a list of files and their class/dependency information,
-# traverse the list and put them in an order that satisfies dependencies. 
+# traverse the list and put them in an order that satisfies dependencies.
 # Walk through the list, taking each file and examining it for dependencies.
 # If it doesn't have any it's fit to go on the list.  If it does, find the file(s)
 # that contain the classes dependencies.  These must go first in the hierarchy.
-#	
+#
 concatFiles = (sourceFiles, fileDefs, listFilesOnly) ->
 	usedFiles = []
 	allFileDefs = fileDefs.slice(0)
@@ -176,7 +176,7 @@ concatFiles = (sourceFiles, fileDefs, listFilesOnly) ->
 				if c == className
 					return fileDef
 		return null
-	
+
 	# Given a filename, find the file definition that
 	# corresponds to it.  If the file isn't found,
 	# return null
@@ -187,8 +187,8 @@ concatFiles = (sourceFiles, fileDefs, listFilesOnly) ->
 			if fileName == name
 				return fileDef
 		return null
-	
-	# recursively resolve the dependencies of a file.  If it 
+
+	# recursively resolve the dependencies of a file.  If it
 	# has no dependencies, return that file in an array.  Otherwise,
 	# find the files with the needed classes and resolve their dependencies
 	#
@@ -208,10 +208,10 @@ concatFiles = (sourceFiles, fileDefs, listFilesOnly) ->
 				else
 					nextStack = resolveDependencies(depFileDef)
 					dependenciesStack = dependenciesStack.concat(if nextStack != null then nextStack else [])
-				
+
 			for neededFile in fileDef.fileDependencies
 				neededFileName = neededFile.split('.')[0]
-				
+
 				neededFileDef = findFileDefByName(neededFileName)
 				if neededFileDef == null
 					console.error("Error: couldn't find needed file: " + neededFileName)
@@ -219,15 +219,15 @@ concatFiles = (sourceFiles, fileDefs, listFilesOnly) ->
 					nextStack = resolveDependencies(neededFileDef)
 					dependenciesStack = dependenciesStack.concat(if nextStack != null then nextStack else [])
 
-						
+
 			if _.indexOf(usedFiles, fileDef.name) == -1
 					dependenciesStack.push(fileDef)
 					usedFiles.push(fileDef.name)
-					
-				
+
+
 
 		return dependenciesStack
-			
+
 	fileDefStack = []
 	while sourceFileDefs.length > 0
 		nextFileDef = sourceFileDefs.pop()
@@ -243,7 +243,7 @@ concatFiles = (sourceFiles, fileDefs, listFilesOnly) ->
 		output += nextFileDef[fileProp] + '\n'
 
 	return output
-	
+
 # remove all #= require directives from the
 # source file.
 removeDirectives = (file) ->
@@ -251,9 +251,9 @@ removeDirectives = (file) ->
 	classDirectiveRegex = /#=\s*require\s+([A-Za-z_$-][A-Za-z0-9_$-]*)/g
 	file = file.replace(fileDirectiveRegex, '')
 	file = file.replace(classDirectiveRegex, '')
-	
+
 	return file
-	
+
 # Given a list of source files,
 # a list of directories to look into for source files,
 # another list of directories to look into for source files recursevily
@@ -272,8 +272,8 @@ concatenate = (sourceFiles, includeDirectories, includeDirectoriesRecursive, out
 			util.puts(output)
 
 
-options = require('optimist').
-usage("""Usage: coffeescript-concat [-I .] [-R .] [-o outputfile.coffee] [--list-files] a.coffee b.coffee
+options = require('yargs').
+usage("""Usage: coffeescript-concat [options] a.coffee b.coffee ...
 If no output file is specified, the resulting source will sent to stdout
 """).
 describe('h', 'display this help').
