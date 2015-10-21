@@ -269,7 +269,7 @@ concatenate = (sourceFiles, includeDirectories, includeDirectoriesRecursive, out
 				console.error err if err
 			)
 		else
-			util.puts(output)
+			console.log(output)
 
 
 options = require('yargs').
