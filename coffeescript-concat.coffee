@@ -284,9 +284,7 @@ describe('R', 'directory to search for files recursively').
 alias('R', 'include-dir-recursive').
 describe('o', 'output file name').
 alias('o', 'output-file').
-describe('list-files', 'list file names instead of outputting file contents').
-alias('w', 'watch').
-describe('w', 'watch inputs and rerun if any changes are made')
+describe('list-files', 'list file names instead of outputting file contents')
 
 argv = options.argv
 includeDirectories = if typeof argv.I is 'string' then [argv.I] else argv.I or []
