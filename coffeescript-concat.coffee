@@ -297,7 +297,9 @@ describe('o', 'output file name').
 alias('o', 'output-file').
 describe('list-files', 'list file names instead of outputting file contents').
 alias('w', 'watch').
-describe('w', 'watch inputs and rerun if any changes are made')
+describe('w', 'watch inputs and rerun if any changes are made').
+alias('c', 'compile').
+describe('c', 'compile coffeescript to javascript before outputting')
 
 argv = options.argv
 
