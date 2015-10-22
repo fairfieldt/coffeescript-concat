@@ -1,19 +1,20 @@
 {
   "name": "coffeescript-concat",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "A utility for combining coffeescript files and resolving their dependencies.",
   "main": "coffeescript-concat.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"prepublish": "./build.sh"
+	   "prepublish": "./build.sh"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/fairfieldt/coffeescript-concat"
   },
   "dependencies": {
-	  "underscore": "*",
-	  "optimist": ">=0.3.5"
+	  "underscore": "latest",
+	  "yargs": "latest",
+    "coffee-script": "latest"
   },
   "bin": "./coffeescript-concat",
   "author": "Tom Fairfield",
