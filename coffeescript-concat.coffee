@@ -58,7 +58,8 @@ findClassDependencies = (file) ->
 
 	dependencies = []
 	while (result = dependencyRegex.exec(file)) != null
-		dependencies.push(result[1])
+		if result[1] != "this"
+			dependencies.push(result[1])
 
 	file = file.replace(dependencyRegex, '')
 
