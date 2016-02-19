@@ -1,6 +1,6 @@
 # coffeescript-concat.coffee
 #
-#  Copyright (C) 2010-2013 Tom Fairfield
+#  Copyright (C) 2010-2016 Tom Fairfield
 #
 #  This software is provided 'as-is', without any express or implied
 #  warranty.  In no event will the authors be held liable for any damages
