@@ -156,9 +156,7 @@ concatFiles = (sourceFiles, fileDefs, listFilesOnly) ->
   # return null
   findFileDefByName = (fileName) ->
     for fileDef in allFileDefs
-      temp = fileDef.name.split '/'
-      name = temp[temp.length-1].split('.')[0]
-      return fileDef if fileName is name
+      return fileDef if fileName is fileDef.name.replace /^.+\/([^/.]+)(\.[^/]+)*$/, '$1'
     null
 
   # recursively resolve the dependencies of a file.  If it
@@ -175,11 +173,11 @@ concatFiles = (sourceFiles, fileDefs, listFilesOnly) ->
     else
       dependenciesStack = []
       for dependency in fileDef.dependencies
-        depFileDef = findFileDefByClass(dependency)
+        depFileDef = findFileDefByClass dependency
         if depFileDef == null
           console.error "Error: couldn't find needed class: " + dependency
         else
-          nextStack = resolveDependencies(depFileDef)
+          nextStack = resolveDependencies depFileDef
           dependenciesStack = dependenciesStack.concat(if nextStack isnt null then nextStack else [])
       for neededFile in fileDef.fileDependencies
         neededFileName = neededFile.split('.')[0]
@@ -221,15 +219,13 @@ removeDirectives = (file) ->
 concatenate = (sourceFiles, includeDirectories, includeDirectoriesRecursive, outputFile, listFilesOnly) ->
   for sourceFile in sourceFiles
     sourceDir = sourceFile.replace /[^/]+$/g, ''
-    includeDirectories.push sourceDir unless sourceDir in includeDirectories
+    includeDirectories.push sourceDir unless sourceDir in includeDirectories 
   mapDependencies sourceFiles, includeDirectories, includeDirectoriesRecursive, (deps) ->
-    output = concatFiles sourceFiles, deps, listFilesOnly
-    output = removeDirectives output
+    output = removeDirectives concatFiles sourceFiles, deps, listFilesOnly
     if outputFile
       fs.writeFile outputFile, output, (err) -> console.error err if err
     else
       console.log output
-
 
 options.usage("""Usage: coffeescript-concat [options] a.coffee b.coffee ...
 If no output file is specified, the resulting source will sent to stdout
