@@ -221,8 +221,7 @@ removeDirectives = (file) ->
 concatenate = (sourceFiles, includeDirectories, includeDirectoriesRecursive, outputFile, listFilesOnly) ->
   for sourceFile in sourceFiles
     sourceDir = sourceFile.replace /[^/]+$/g, ''
-    includeDirectories.push sourceDir unless sourceDir in includeDirectories 
-  console.log includeDirectories
+    includeDirectories.push sourceDir unless sourceDir in includeDirectories
   mapDependencies sourceFiles, includeDirectories, includeDirectoriesRecursive, (deps) ->
     output = concatFiles sourceFiles, deps, listFilesOnly
     output = removeDirectives output
