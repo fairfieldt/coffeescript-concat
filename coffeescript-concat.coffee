@@ -21,15 +21,12 @@
 # Tom Fairfield <fairfield@cs.xu.edu>
 #
 
-requires = 
-  util:    'util'
-  fs:      'fs'
-  path:    'path'
-  _:       'underscore'
-  options: 'yargs'
+util = require('util')
+fs = require('fs')
+path = require('path')
+_ = require('underscore')
+options = require('yargs')
   
-global[key] = require val for key, val of requires
-
 # Search through a file and find all class definitions,
 # ignoring those in comments
 #
